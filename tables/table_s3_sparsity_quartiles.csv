@@ -1,0 +1,5 @@
+Sparsity_Quartile,Sparsity_pct,Delta_PCC,Poisson_Wins,Win_Rate
+Q1 (Low),84.1219,0.0329,7,56.0
+Q2,95.2357,0.1225,12,96.0
+Q3,96.705,0.1151,12,96.0
+Q4 (High),98.0507,0.1037,13,104.0

@@ -1,0 +1,8 @@
+Category,Mean_Sparsity,Mean_Delta_PCC,Mean_Delta_SSIM,Poisson_Wins,Total_Genes,Win_Rate
+Epithelial,95.8183,0.1566,0.6788,4,4,100.0
+Housekeeping,92.4827,0.0799,0.2797,4,4,100.0
+Immune,95.6063,0.1004,0.2743,4,5,80.0
+Mitochondrial,82.8858,0.0419,0.2467,5,10,50.0
+Other,97.1094,0.0989,0.5528,19,19,100.0
+Secretory,94.8844,0.0926,0.6019,3,3,100.0
+Stromal,96.3413,0.1203,0.1282,5,5,100.0

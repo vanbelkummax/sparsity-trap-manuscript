@@ -1,0 +1,132 @@
+\documentclass[twocolumn]{article}
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{hyperref}
+
+% Page layout for two-column format
+\usepackage[margin=0.75in]{geometry}
+
+\begin{document}
+
+\title{The Sparsity Trap: Why MSE Fails and Poisson Succeeds for 2μm Spatial Transcriptomics Prediction}
+
+\author{
+Max Van Belkum\\
+\textit{MD-PhD Program} \\
+\textit{Vanderbilt University Medical Center}\\
+Nashville, TN, USA \\
+\texttt{max.vanbelkum@vanderbilt.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+Visium HD spatial transcriptomics enables gene expression profiling at 2μm resolution, but the extreme sparsity of count data (95\% zeros) creates a fundamental challenge for prediction models. We demonstrate that standard mean squared error (MSE) loss catastrophically fails at this resolution, collapsing to uniform near-zero predictions that we term the ``sparsity trap.'' In contrast, Poisson negative log-likelihood (NLL) loss avoids this failure mode by assigning infinite penalty when predicting zero expression for non-zero counts. Using a 2×2 factorial design (decoder architecture × loss function) with 3-fold cross-validation on colorectal cancer Visium HD data, we show that Poisson loss achieves 2.7× better structural similarity (SSIM 0.542 vs 0.200, p<0.001) compared to MSE. All 50 genes analyzed showed improved SSIM with Poisson loss, with benefit strongly correlated to gene sparsity (r=0.577, p<0.0001). Qualitative analysis reveals that Poisson preserves glandular architecture in epithelial markers (CEACAM5, EPCAM), while MSE produces featureless ``gray fog.'' Our factorial analysis further shows a synergistic interaction between Hist2ST decoder and Poisson loss (2.71× improvement vs 1.89× with simpler U-Net). These findings establish Poisson NLL as essential for high-resolution spatial transcriptomics prediction and provide the foundation for next-generation zero-inflated models.
+\end{abstract}
+
+\noindent\textbf{Keywords:} spatial transcriptomics, deep learning, loss functions, Visium HD, gene expression prediction
+
+\section{Introduction}
+
+% PLACEHOLDER: Will be filled in next task
+% Visual hook: CEACAM5 comparison
+% Problem: High-resolution ST at 2um
+% Gap: Does MSE work at 2um?
+
+\section{The Sparsity Trap}
+
+% PLACEHOLDER: Will be filled in next task
+% Data characteristics: 95% zeros
+% MSE failure mode
+% Mathematical analysis
+
+\section{Methods}
+
+\subsection{Dataset}
+% PLACEHOLDER
+
+\subsection{Architecture}
+% PLACEHOLDER
+
+\subsection{Loss Functions}
+% PLACEHOLDER
+
+\subsection{Experimental Design}
+% PLACEHOLDER
+
+\subsection{Evaluation Metrics}
+% PLACEHOLDER
+
+\section{Results}
+
+\subsection{Factorial Design}
+% PLACEHOLDER
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.95\columnwidth]{figs/figure_1_combined.png}
+  \caption{The Sparsity Trap: Factorial Design and Per-Gene Analysis. (a) 2×2 factorial heatmap showing mean SSIM with 3-fold CV error bars. Poisson loss dramatically outperforms MSE, with synergistic benefit when paired with Hist2ST decoder. (b) Per-gene scatter plot: all 50 genes lie above the diagonal (MSE SSIM < Poisson SSIM). (c) Sparsity correlation: genes with higher sparsity (more zeros) benefit more from Poisson loss (r=0.577, p<0.0001). (d) Waterfall plot: all genes show positive Δ-SSIM, with TSPAN8 achieving +0.73 improvement.}
+  \label{fig:factorial}
+\end{figure}
+
+\subsection{Glandular Structure Recovery}
+% PLACEHOLDER
+
+\begin{figure*}[t!]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figs/figure_wsi_comparison_composite.png}
+  \caption{Glandular Structure Recovery with Poisson Loss. Whole-slide image comparisons for four epithelial markers (CEACAM5, EPCAM, KRT8, OLFM4) showing ground truth, MSE prediction (gray fog), and Poisson prediction (crisp gland boundaries). SSIM scores demonstrate dramatic improvement: CEACAM5 (0.105→0.804), EPCAM (0.102→0.785), KRT8 (0.096→0.769), OLFM4 (0.107→0.785).}
+  \label{fig:wsi_recovery}
+\end{figure*}
+
+\subsection{Per-Gene Analysis}
+% PLACEHOLDER
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.95\columnwidth]{figs/figure_4_representative_genes.png}
+  \caption{Representative Genes by Category. 2×3 grid showing top-performing genes from each functional category: Epithelial (CEACAM5, Δ-SSIM +0.699), Immune (JCHAIN, +0.459), Stromal (VIM, +0.180), Secretory (MUC12, +0.632), Mitochondrial (MT-ND5, +0.517), Housekeeping (TMSB10, +0.409). All categories benefit from Poisson loss, with epithelial and secretory markers showing largest gains.}
+  \label{fig:categories}
+\end{figure}
+
+\subsection{Main Effects}
+% PLACEHOLDER
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[width=0.95\columnwidth]{figs/figure_3_main_effects.png}
+  \caption{Factorial Analysis: Main Effects and Interaction. (a) Loss function main effect: Poisson achieves 2.37× improvement over MSE (averaged across decoders). (b) Decoder main effect: Hist2ST achieves 1.81× improvement over Img2ST (averaged across losses). (c) Interaction plot: non-parallel lines indicate synergistic interaction—Poisson provides greater benefit with Hist2ST (2.71×) than with Img2ST (1.89×).}
+  \label{fig:main_effects}
+\end{figure}
+
+\section{Discussion}
+
+\subsection{Why Poisson Works}
+% PLACEHOLDER
+
+\subsection{Comparison to Prior Work}
+% PLACEHOLDER
+
+\subsection{Limitations}
+% PLACEHOLDER
+
+\subsection{Future Directions}
+% PLACEHOLDER
+
+\section{Conclusion}
+
+% PLACEHOLDER
+
+\section*{Acknowledgments}
+This work was supported by the Vanderbilt MD-PhD Program. We thank Yuankai Huo, Ken Lau, and Bennett Landman for helpful discussions.
+
+\bibliographystyle{IEEEtran}
+\bibliography{main}
+
+\end{document}

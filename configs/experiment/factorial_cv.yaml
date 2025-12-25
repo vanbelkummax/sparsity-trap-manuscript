@@ -1,0 +1,86 @@
+# 2×2 Factorial Cross-Validation Experiment
+# Systematic benchmark of Loss (MSE vs Poisson) × Decoder (Hist2ST vs Img2ST)
+
+name: factorial_cv_2um
+description: "3-fold CV for MSE vs Poisson loss comparison at 2μm resolution"
+
+# Cross-validation folds
+folds:
+  - id: 1
+    train: [P1, P2]
+    test: P5
+  - id: 2
+    train: [P1, P5]
+    test: P2
+  - id: 3
+    train: [P2, P5]
+    test: P1
+
+# 2×2 Factorial design: 4 model configurations
+models:
+  # Model E': Hist2ST + Poisson (BEST)
+  - name: E_prime
+    decoder: hist2st
+    loss: poisson
+    rank: 1
+    description: "CNN+Transformer+GNN decoder with Poisson NLL loss"
+
+  # Model F: Img2ST + Poisson
+  - name: F
+    decoder: img2st
+    loss: poisson
+    rank: 2
+    description: "Simple U-Net decoder with Poisson NLL loss"
+
+  # Model D': Hist2ST + MSE
+  - name: D_prime
+    decoder: hist2st
+    loss: mse
+    rank: 3
+    description: "CNN+Transformer+GNN decoder with MSE loss (baseline)"
+
+  # Model G: Img2ST + MSE (WORST)
+  - name: G
+    decoder: img2st
+    loss: mse
+    rank: 4
+    description: "Simple U-Net decoder with MSE loss"
+
+# Data configuration
+data:
+  resolution: 2um              # 2μm bins
+  patch_size: 128              # 128×128 bins at 2μm
+  image_size: 512              # H&E images 512×512 (downsampled to 128)
+  num_genes: 50                # Top 50 genes by variance
+  preprocessing: raw_counts    # NO normalization (critical for Poisson)
+  augmentation:
+    horizontal_flip: 0.5
+    vertical_flip: 0.5
+    rotation_90: 0.5
+
+# Training hyperparameters
+training:
+  batch_size: 16
+  epochs: 100
+  learning_rate: 1.0e-4
+  optimizer: AdamW
+  weight_decay: 0.01
+  scheduler: cosine
+  early_stopping_patience: 15
+  seed: 42
+
+# Evaluation metrics
+metrics:
+  - SSIM                       # Structural Similarity (primary metric)
+  - PCC                        # Pearson Correlation Coefficient
+  - MAE                        # Mean Absolute Error
+  - sparsity_correlation       # Correlation between sparsity and improvement
+
+# Expected results (from tables/table_s1_pergene_metrics.csv)
+expected_results:
+  E_prime_ssim: 0.542          # Hist2ST + Poisson
+  D_prime_ssim: 0.200          # Hist2ST + MSE
+  improvement: 2.71            # 2.7× improvement
+  genes_improved: 50           # 50/50 genes benefit
+  mean_delta_ssim: 0.412       # Average improvement across genes
+  sparsity_correlation: 0.577  # r=0.577, p<0.0001

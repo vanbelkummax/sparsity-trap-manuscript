@@ -1,0 +1,111 @@
+# Img2ST Decoder Architecture Configuration
+# Simple U-Net baseline for comparison
+
+model_name: img2st_decoder
+description: "Simple U-Net decoder with skip connections"
+
+# Encoder
+encoder:
+  name: virchow2
+  type: vision_transformer
+  output_dim: 1024
+  frozen: true               # Encoder weights frozen during training
+  pretrained: true
+  source: paige_ai
+
+# Decoder architecture
+decoder:
+  type: img2st
+  architecture: unet
+
+  # U-Net structure
+  unet:
+    # Encoder path (downsampling)
+    down_channels: [1024, 512, 256, 128]
+    down_blocks:
+      - conv_per_block: 2
+        kernel_size: 3
+        pooling: max_pool_2x2
+
+    # Bottleneck
+    bottleneck_channels: 64
+
+    # Decoder path (upsampling)
+    up_channels: [128, 256, 512, 1024]
+    up_blocks:
+      - conv_per_block: 2
+        kernel_size: 3
+        upsampling: transposed_conv_2x2
+
+    # Skip connections
+    skip_connections: true
+    skip_type: concatenate
+
+  # Output layer
+  output:
+    num_genes: 50
+    spatial_size: [128, 128]
+    initialization:
+      bias: -3.0               # CRITICAL: exp(-3) ≈ 0.05 matches ~95% zeros
+      weights: xavier_normal
+    output_activation: none    # Linear output (log-lambda for Poisson)
+
+# Loss function configurations
+loss_functions:
+  # Poisson NLL
+  poisson:
+    type: poisson_nll
+    reduction: mean
+    eps: 1.0e-8
+    output_transform: exp      # exp(linear_output) = lambda
+
+  # MSE
+  mse:
+    type: mse
+    reduction: mean
+    output_transform: exp      # Same output transform for fair comparison
+
+# Training settings specific to Img2ST
+training:
+  learning_rate: 1.0e-4
+  optimizer: adamw
+  weight_decay: 0.01
+  gradient_clip: 1.0
+  scheduler:
+    type: cosine
+    warmup_epochs: 5
+    min_lr: 1.0e-6
+
+# Model statistics
+performance:
+  # From tables/table_s1_pergene_metrics.csv
+  F:                           # Img2ST + Poisson
+    ssim_mean: 0.268
+    ssim_std: 0.013
+    pcc_2um: 0.00
+    pcc_8um: 0.00
+    rank: 2
+  G:                           # Img2ST + MSE
+    ssim_mean: 0.142
+    ssim_std: 0.007
+    pcc_2um: 0.00
+    pcc_8um: 0.00
+    rank: 4
+  improvement:
+    ssim_ratio: 1.89           # Poisson still better than MSE
+    absolute_delta: 0.126
+    significance: "p < 0.01"
+
+# Comparison to Hist2ST
+comparison:
+  simpler_architecture: "No transformer or GNN components"
+  faster_training: "~2× faster per epoch"
+  lower_performance: "Hist2ST achieves 2× better SSIM"
+  use_case: "Baseline comparison, simpler deployment"
+
+# Architecture motivation
+design_rationale:
+  unet: "Standard architecture for image-to-image translation"
+  skip_connections: "Preserve spatial information during downsampling"
+  simplicity: "Fewer parameters, easier to train and deploy"
+  bias_init: "Critical for Poisson training on sparse data (same as Hist2ST)"

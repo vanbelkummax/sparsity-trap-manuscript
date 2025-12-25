@@ -1,0 +1,122 @@
+# Hist2ST Decoder Architecture Configuration
+# Best performing model: E' (Hist2ST + Poisson)
+
+model_name: hist2st_decoder
+description: "Multi-pathway decoder with CNN, Transformer, and GNN branches"
+
+# Encoder
+encoder:
+  name: virchow2
+  type: vision_transformer
+  output_dim: 1024
+  frozen: true               # Encoder weights frozen during training
+  pretrained: true
+  source: paige_ai
+
+# Decoder architecture
+decoder:
+  type: hist2st
+
+  # Three parallel pathways
+  pathways:
+    # 1. CNN pathway (local texture)
+    cnn:
+      enabled: true
+      layers:
+        - type: conv2d
+          kernel: 3
+          channels: [1024, 512, 256]
+          activation: gelu
+      description: "Captures local tissue texture with 3×3 convolutions"
+
+    # 2. Transformer pathway (global context)
+    transformer:
+      enabled: true
+      num_heads: 8
+      num_layers: 4
+      dim_feedforward: 2048
+      dropout: 0.1
+      description: "Captures long-range spatial dependencies"
+
+    # 3. GNN pathway (neighborhood structure)
+    gnn:
+      enabled: true
+      k_neighbors: 8
+      num_layers: 3
+      hidden_dim: 512
+      description: "Captures neighborhood structure via graph convolutions"
+
+  # Fusion and upsampling
+  fusion:
+    method: concatenate
+    fusion_dim: 1024
+    upsampling:
+      - type: transposed_conv
+        scale: 2
+        channels: 512
+      - type: transposed_conv
+        scale: 2
+        channels: 256
+    output_activation: none    # Linear output (log-lambda for Poisson)
+
+  # Output layer
+  output:
+    num_genes: 50
+    spatial_size: [128, 128]
+    initialization:
+      bias: -3.0               # CRITICAL: exp(-3) ≈ 0.05 matches ~95% zeros
+      weights: xavier_normal
+
+# Loss function configurations
+loss_functions:
+  # Poisson NLL (recommended)
+  poisson:
+    type: poisson_nll
+    reduction: mean
+    eps: 1.0e-8
+    output_transform: exp      # exp(linear_output) = lambda
+
+  # MSE (baseline comparison)
+  mse:
+    type: mse
+    reduction: mean
+    output_transform: exp      # Same output transform for fair comparison
+
+# Training settings specific to Hist2ST
+training:
+  learning_rate: 1.0e-4
+  optimizer: adamw
+  weight_decay: 0.01
+  gradient_clip: 1.0
+  scheduler:
+    type: cosine
+    warmup_epochs: 5
+    min_lr: 1.0e-6
+
+# Model statistics
+performance:
+  # From tables/table_s1_pergene_metrics.csv
+  E_prime:                     # Hist2ST + Poisson
+    ssim_mean: 0.542
+    ssim_std: 0.019
+    pcc_2um: 0.182
+    pcc_8um: 0.399
+    rank: 1
+  D_prime:                     # Hist2ST + MSE
+    ssim_mean: 0.200
+    ssim_std: 0.012
+    pcc_2um: 0.111
+    pcc_8um: 0.213
+    rank: 3
+  improvement:
+    ssim_ratio: 2.71           # 2.7× improvement
+    absolute_delta: 0.342
+    significance: "p < 0.001"
+
+# Architecture motivation
+design_rationale:
+  cnn: "Local texture from H&E staining patterns"
+  transformer: "Global context for tissue architecture understanding"
+  gnn: "Explicit neighborhood modeling for spatial correlation"
+  fusion: "Combines complementary information from all pathways"
+  bias_init: "Critical for Poisson training on sparse data"

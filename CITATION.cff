@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Van Belkum
+    given-names: Max
+    email: max.vanbelkum@vanderbilt.edu
+    affiliation: Vanderbilt University Medical Center
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: Add real ORCID
+title: "The Sparsity Trap: Why MSE Fails and Poisson Succeeds for 2μm Spatial Transcriptomics Prediction"
+version: 1.0.0
+doi: 10.XXXXX/XXXXX  # Will be updated after ArXiv/Zenodo
+date-released: 2025-12-25
+url: "https://github.com/vanbelkummax/sparsity-trap-manuscript"
+repository-code: "https://github.com/vanbelkummax/sparsity-trap-manuscript"
+keywords:
+  - spatial-transcriptomics
+  - deep-learning
+  - loss-functions
+  - poisson-regression
+  - visium-hd
+  - gene-expression
+license: MIT
+abstract: |
+  Visium HD spatial transcriptomics enables gene expression profiling at 2μm
+  resolution, but extreme sparsity (95% zeros) creates a fundamental challenge.
+  We demonstrate that MSE loss catastrophically fails, collapsing to uniform
+  near-zero predictions. Poisson NLL avoids this failure mode, achieving 2.7×
+  better SSIM. All 50 genes benefit, with improvement strongly correlated to
+  gene sparsity (r=0.577, p<0.0001). This work establishes Poisson NLL as
+  essential for high-resolution spatial transcriptomics.
