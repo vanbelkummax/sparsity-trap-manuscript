@@ -141,44 +141,66 @@ Visual comparison of representative genes illustrates the extent of spatial stru
   \label{fig:representative}
 \end{figure*}
 
-\subsection*{Tissue-Scale and Glandular-Scale Validation}
+\subsection*{Whole Slide Image Validation}
 
-To validate predictions across spatial scales, we present both whole slide image (WSI) and high-magnification glandular comparisons (Figure~\ref{fig:multiscale}). WSI analysis spans entire tissue sections at 2$\mu$m resolution, while glandular regions show fine-scale tumor architecture. Each comparison displays ground truth expression (left), MSE prediction (center), and Poisson prediction (right). These images demonstrate that the sparsity trap persists across both tissue-scale and subcellular-scale analysis.
+To validate predictions at tissue scale, we present whole slide image (WSI) comparisons spanning 7 representative genes across epithelial, secretory, immune, and stromal categories (Figure~\ref{fig:wsi}). Each comparison displays ground truth expression (left), MSE prediction (center), and Poisson prediction (right) for entire tissue sections at 2$\mu$m resolution.
 
-\begin{figure*}[t!]
+\begin{figure*}[p]
   \centering
-  \textbf{A. Whole Slide Image Comparisons}\\[0.3cm]
+  \includegraphics[width=0.70\textwidth]{figures/wsi/TSPAN8_2um_WSI_improved.png}\\[0.02cm]
+  \textit{\small TSPAN8 (epithelial): +0.731 SSIM, 97.8\% sparsity}\\[0.15cm]
 
-  \includegraphics[width=0.95\textwidth]{figures/wsi/TSPAN8_2um_WSI_improved.png}\\[0.2cm]
-  \textit{TSPAN8 (tetraspanin-8, epithelial): +0.731 SSIM, 97.8\% sparsity}\\[0.4cm]
+  \includegraphics[width=0.70\textwidth]{figures/wsi/CEACAM5_2um_WSI_improved.png}\\[0.02cm]
+  \textit{\small CEACAM5 (epithelial): +0.701 SSIM, 98.0\% sparsity}\\[0.15cm]
 
-  \includegraphics[width=0.95\textwidth]{figures/wsi/CEACAM5_2um_WSI_improved.png}\\[0.2cm]
-  \textit{CEACAM5 (CEA, epithelial): +0.701 SSIM, 98.0\% sparsity}\\[0.4cm]
+  \includegraphics[width=0.70\textwidth]{figures/wsi/KRT8_2um_WSI_improved.png}\\[0.02cm]
+  \textit{\small KRT8 (epithelial): +0.673 SSIM, 97.9\% sparsity}\\[0.15cm]
 
-  \includegraphics[width=0.95\textwidth]{figures/wsi/KRT8_2um_WSI_improved.png}\\[0.2cm]
-  \textit{KRT8 (keratin 8, epithelial): +0.673 SSIM, 97.9\% sparsity}\\[0.4cm]
+  \includegraphics[width=0.70\textwidth]{figures/wsi/EPCAM_2um_WSI_improved.png}\\[0.02cm]
+  \textit{\small EPCAM (epithelial): +0.669 SSIM, 98.1\% sparsity}\\[0.15cm]
 
-  \includegraphics[width=0.95\textwidth]{figures/wsi/EPCAM_2um_WSI_improved.png}\\[0.2cm]
-  \textit{EPCAM (epithelial cell adhesion molecule): +0.669 SSIM, 98.1\% sparsity}\\[0.4cm]
+  \includegraphics[width=0.70\textwidth]{figures/wsi/MUC12_2um_WSI_improved.png}\\[0.02cm]
+  \textit{\small MUC12 (secretory): +0.633 SSIM, 97.4\% sparsity}\\[0.15cm]
 
-  \includegraphics[width=0.95\textwidth]{figures/wsi/MUC12_2um_WSI_improved.png}\\[0.2cm]
-  \textit{MUC12 (mucin 12, secretory): +0.633 SSIM, 97.4\% sparsity}\\[0.4cm]
+  \includegraphics[width=0.70\textwidth]{figures/wsi/JCHAIN_2um_WSI_improved.png}\\[0.02cm]
+  \textit{\small JCHAIN (immune): +0.457 SSIM, 96.2\% sparsity}\\[0.15cm]
 
-  \includegraphics[width=0.95\textwidth]{figures/wsi/JCHAIN_2um_WSI_improved.png}\\[0.2cm]
-  \textit{JCHAIN (joining chain, immune): +0.457 SSIM, 96.2\% sparsity}\\[0.4cm]
+  \includegraphics[width=0.70\textwidth]{figures/wsi/VIM_2um_WSI_improved.png}\\[0.02cm]
+  \textit{\small VIM (stromal): +0.181 SSIM, 92.8\% sparsity}
 
-  \includegraphics[width=0.95\textwidth]{figures/wsi/VIM_2um_WSI_improved.png}\\[0.2cm]
-  \textit{VIM (vimentin, stromal): +0.181 SSIM, 92.8\% sparsity}\\[0.4cm]
+  \caption{\textbf{Whole slide image validation across 7 representative genes.} Tissue-scale comparisons demonstrate that MSE predictions collapse to near-uniform values across entire tissue sections, while Poisson predictions recover spatial heterogeneity, tumor-stroma boundaries, and regional expression patterns. TSPAN8 showed highest improvement (+0.731 SSIM). Each row shows ground truth (left), MSE prediction (center), Poisson prediction (right).}
+  \label{fig:wsi}
+\end{figure*}
 
-  \textbf{B. Glandular Architecture at 2$\mu$m Resolution}\\[0.3cm]
-  \includegraphics[width=0.95\textwidth]{figures/tiles_TSPAN8.png}\\[0.2cm]
-  \textit{TSPAN8 glandular detail showing epithelial boundaries}\\[0.4cm]
+\subsection*{Glandular-Scale Validation}
 
-  \includegraphics[width=0.95\textwidth]{figures/tiles_CEACAM5.png}\\[0.2cm]
-  \textit{CEACAM5 glandular detail showing tumor architecture}
+To validate predictions at subcellular scale, we present high-resolution tile comparisons (256$\times$256 pixels at 2$\mu$m resolution) showing fine-grained tumor architecture (Figure~\ref{fig:tiles}). These magnified regions reveal spatial details completely lost in MSE predictions.
 
-  \caption{\textbf{Multi-scale validation of Poisson advantage across 7 representative genes.} (A) Whole slide images spanning epithelial, secretory, immune, and stromal markers demonstrate that MSE predictions collapse to near-uniform values across entire tissue sections, while Poisson predictions recover spatial heterogeneity and tumor-stroma boundaries. TSPAN8 showed highest improvement (+0.731 SSIM). (B) High-magnification views of glandular regions reveal that Poisson captures fine-scale epithelial architecture, lumen boundaries, and expression gradients within individual tumor glands---details completely lost in MSE predictions. Ground truth (left), MSE prediction (center), Poisson prediction (right).}
-  \label{fig:multiscale}
+\begin{figure*}[p]
+  \centering
+  \includegraphics[width=0.70\textwidth]{figures/tiles/TSPAN8_tile_comparison.png}\\[0.02cm]
+  \textit{\small TSPAN8 epithelial gland}\\[0.1cm]
+
+  \includegraphics[width=0.70\textwidth]{figures/tiles/CEACAM5_tile_comparison.png}\\[0.02cm]
+  \textit{\small CEACAM5 tumor architecture}\\[0.1cm]
+
+  \includegraphics[width=0.70\textwidth]{figures/tiles/KRT8_tile_comparison.png}\\[0.02cm]
+  \textit{\small KRT8 epithelial boundaries}\\[0.1cm]
+
+  \includegraphics[width=0.70\textwidth]{figures/tiles/EPCAM_tile_comparison.png}\\[0.02cm]
+  \textit{\small EPCAM glandular lumen}\\[0.1cm]
+
+  \includegraphics[width=0.70\textwidth]{figures/tiles/MUC12_tile_comparison.png}\\[0.02cm]
+  \textit{\small MUC12 secretory granules}\\[0.1cm]
+
+  \includegraphics[width=0.70\textwidth]{figures/tiles/JCHAIN_tile_comparison.png}\\[0.02cm]
+  \textit{\small JCHAIN immune infiltrates}\\[0.1cm]
+
+  \includegraphics[width=0.70\textwidth]{figures/tiles/VIM_tile_comparison.png}\\[0.02cm]
+  \textit{\small VIM stromal fibroblasts}
+
+  \caption{\textbf{Glandular-scale validation at 2$\mu$m resolution.} High-magnification tile comparisons (256$\times$256 pixels) reveal that Poisson captures fine-scale epithelial architecture, lumen boundaries, secretory granules, immune cell infiltration, and stromal organization---spatial details completely lost in MSE predictions. Each row shows ground truth (left), MSE prediction (center), Poisson prediction (right).}
+  \label{fig:tiles}
 \end{figure*}
 
 \section*{Discussion}
