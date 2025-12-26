@@ -174,32 +174,12 @@ To validate predictions at tissue scale, we present whole slide image (WSI) comp
 
 \subsection*{Glandular-Scale Validation}
 
-To validate predictions at subcellular scale, we present high-resolution tile comparisons (256$\times$256 pixels at 2$\mu$m resolution) showing fine-grained tumor architecture (Figure~\ref{fig:tiles}). These magnified regions reveal spatial details completely lost in MSE predictions.
+To validate predictions at subcellular scale, we present a high-resolution tile comparison (256$\times$256 pixels at 2$\mu$m resolution) of CEACAM5 expression showing fine-grained tumor architecture (Figure~\ref{fig:tiles}). This magnified region reveals epithelial boundaries and lumen structure completely lost in MSE predictions.
 
-\begin{figure*}[p]
+\begin{figure*}[t!]
   \centering
-  \includegraphics[width=0.28\textwidth]{figures/tiles/TSPAN8_tile_comparison.png}\\
-  \textit{\tiny TSPAN8}\\[0.01cm]
-
-  \includegraphics[width=0.28\textwidth]{figures/tiles/CEACAM5_tile_comparison.png}\\
-  \textit{\tiny CEACAM5}\\[0.01cm]
-
-  \includegraphics[width=0.28\textwidth]{figures/tiles/KRT8_tile_comparison.png}\\
-  \textit{\tiny KRT8}\\[0.01cm]
-
-  \includegraphics[width=0.28\textwidth]{figures/tiles/EPCAM_tile_comparison.png}\\
-  \textit{\tiny EPCAM}\\[0.01cm]
-
-  \includegraphics[width=0.28\textwidth]{figures/tiles/MUC12_tile_comparison.png}\\
-  \textit{\tiny MUC12}\\[0.01cm]
-
-  \includegraphics[width=0.28\textwidth]{figures/tiles/JCHAIN_tile_comparison.png}\\
-  \textit{\tiny JCHAIN}\\[0.01cm]
-
-  \includegraphics[width=0.28\textwidth]{figures/tiles/VIM_tile_comparison.png}\\
-  \textit{\tiny VIM}
-
-  \caption{\textbf{Glandular-scale validation at 2$\mu$m resolution.} High-magnification tile comparisons (256$\times$256 pixels) reveal that Poisson captures fine-scale epithelial architecture, lumen boundaries, secretory granules, immune cell infiltration, and stromal organization---spatial details completely lost in MSE predictions. Each row shows ground truth (left), MSE prediction (center), Poisson prediction (right).}
+  \includegraphics[width=0.95\textwidth]{figures/tiles/CEACAM5_tile_comparison.png}
+  \caption{\textbf{Glandular-scale validation at 2$\mu$m resolution.} High-magnification tile comparison (256$\times$256 pixels) of CEACAM5 (epithelial marker, +0.701 SSIM) reveals that Poisson captures fine-scale tumor gland architecture, epithelial boundaries, and lumen structure---spatial details completely lost in MSE predictions. Ground truth (left), MSE prediction (center), Poisson prediction (right).}
   \label{fig:tiles}
 \end{figure*}
 
