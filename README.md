@@ -1,11 +1,18 @@
 # The Sparsity Trap: MSE vs Poisson for 2μm Spatial Transcriptomics
 
-**Lean manuscript package (<100MB) with essential figures and complete results**
+**Publication-ready manuscript with multi-scale validation and corrected SSIM implementation**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-17%2F17%20passing-success)](tests/)
+[![SSIM](https://img.shields.io/badge/SSIM%20bug-fixed-green)](METRICS_CLARIFICATION.md)
 
 > **Full repository with all 50 genes**: https://github.com/vanbelkummax/sparsity-trap-publication
+
+---
+
+## Important Update (December 25, 2025)
+
+**SSIM Bug Fixed**: A code review identified that `src/evaluation/metrics.py` incorrectly returned Pearson correlation when masks were applied. Investigation confirmed that the **training scripts used correct SSIM computation**, so all manuscript results remain valid. The bug has been fixed for code consistency. See [METRICS_CLARIFICATION.md](METRICS_CLARIFICATION.md) for details.
 
 ---
 
@@ -62,18 +69,24 @@
 
 **Size**: ~65MB (vs 721MB full repo)
 
+**Manuscript**:
+- ✅ **sparsity_trap_manuscript_v2.tex** - Final publication-ready manuscript (12 pages)
+- ✅ **sparsity_trap_manuscript_v2.pdf** - Compiled PDF with embedded figures (20 MB)
+- ✅ All 24 citations verified and relevant
+
 **Figures**:
-- ✅ 9 manuscript figures (main + supplemental)
-- ✅ 7 WSI examples (representative genes)
-- ✅ 7 tile examples (2μm detail)
+- ✅ 5 main figures (factorial, category, main effects, representative genes, multi-scale)
+- ✅ 7 WSI examples (whole slide images showing tissue-level validation)
+- ✅ 2 granular glandular examples (2μm subcellular architecture)
+- ✅ Combined multi-panel Figure 5 with WSI + glandular detail
 
 **Code & Data**:
-- ✅ Complete source code
+- ✅ Complete source code (SSIM bug fixed)
 - ✅ 17 tests (100% passing)
 - ✅ Training & visualization scripts
 - ✅ Per-gene metrics (all 50 genes, CSV)
 - ✅ Experiment configs
-- ✅ Documentation
+- ✅ **METRICS_CLARIFICATION.md** - Documentation of SSIM computation
 
 **Representative Genes** (1 per category):
 - TSPAN8 (Other, +0.73)

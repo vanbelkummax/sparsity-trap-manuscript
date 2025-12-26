@@ -42,24 +42,43 @@ def compute_ssim(img1, img2, mask=None, batched=False, data_range=None):
     assert img1.shape == img2.shape
 
     # Apply mask if provided
+    # NOTE: This function was previously buggy (returned Pearson correlation when masked).
+    # Fixed to use proper masked SSIM as implemented in training scripts.
+    # The training script (train_2um_cv_3fold.py) multiplies images by mask before SSIM,
+    # which is the correct approach for computing SSIM on masked spatial data.
     if mask is not None:
         assert mask.shape == img1.shape
         mask = mask.astype(bool)
-        # Extract masked regions as 1D arrays
-        img1_masked = img1[mask]
-        img2_masked = img2[mask]
-        # Compute SSIM on 1D arrays (not ideal, but consistent)
-        # Alternative: compute on full image then threshold
-        # For proper implementation, we'd need windowed SSIM with mask
-        # For simplicity, treat as 1D correlation-like metric
-        if len(img1_masked) == 0:
+
+        # Check if mask has any valid pixels
+        if mask.sum() == 0:
             return 0.0
-        # Use Pearson correlation as proxy when masked
-        # (True SSIM requires spatial structure, hard with mask)
-        from scipy.stats import pearsonr
-        if np.std(img1_masked) == 0 or np.std(img2_masked) == 0:
+
+        # Multiply images by mask (preserves spatial structure)
+        img1 = img1 * mask
+        img2 = img2 * mask
+
+        # Normalize to [0, 1] range for SSIM computation
+        combined = np.concatenate([img1.flatten(), img2.flatten()])
+        vmin, vmax = combined.min(), combined.max()
+
+        if vmax - vmin < 1e-6:
             return 0.0
-        return pearsonr(img1_masked, img2_masked)[0]
+
+        img1_norm = (img1 - vmin) / (vmax - vmin)
+        img2_norm = (img2 - vmin) / (vmax - vmin)
+
+        # Compute true SSIM on masked images (not Pearson correlation!)
+        ssim_val = ssim_skimage(
+            img1_norm, img2_norm,
+            data_range=1.0,
+            win_size=7,
+            gaussian_weights=True,
+            sigma=1.5,
+            use_sample_covariance=False
+        )
+
+        return float(ssim_val)
 
     # Infer data range
     if data_range is None:
